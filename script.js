@@ -1,5 +1,6 @@
 window.onload = function(){
-
+var cart = {};
+var goods = {};
     function showDate(){
         var str = '';
         var now = new Date();
@@ -12,6 +13,8 @@ window.onload = function(){
        data = data['feed']['entry']
        show(data)
        console.log(data);
+        goods = arrayHelper(data)
+        console.log(goods)
     }
 )
 function show (data){
@@ -29,5 +32,30 @@ function show (data){
 }
 document.onclick = function(e){
     console.log(e.target.attributes.name.nodeValue,e.target.attributes.data.nodeValue);
+    if (e.target.attributes.name.nodeValue  == 'add_to_cart'){
+        addToCart(e.target.attributes.data.nodeValue);
+    }
 }
+ function addToCart(elem){
+        if (cart[elem] !== undefined){
+            cart[elem]++;
+        }
+    else{
+        cart[elem] = 1;
+    }
+    console.log(cart);
+ }
+ function arrayHelper(arr){
+     var out = {};
+     for(var i = 0; i < arr.length; i++){
+         var temp = {};
+         temp['article'] = arr[i]['gsx$article']['$t'];
+         temp['name'] = arr[i]['gsx$name']['$t'];
+         temp['count'] = arr[i]['gsx$count']['$t'];
+         temp['image'] = arr[i]['gsx$image']['$t'];
+         temp['price'] = arr[i]['gsx$price']['$t'];
+         out[arr[i]['gsx$article']['$t']] = temp;
+     }
+     return out ;
+ }
 }
